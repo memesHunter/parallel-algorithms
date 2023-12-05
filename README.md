@@ -8,9 +8,9 @@
 | 22088 ms     | 6504 ms    |
 | 21966 ms     | 7396 ms    |
 
-###Average Sequential time
+### Average Sequential time
 22576.6 ms
-###Average Parallel time
+### Average Parallel time
 7215 ms
-###Speed increase
+### Speed increase
 3.12912 times
