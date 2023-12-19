@@ -1,12 +1,14 @@
 import kotlin.system.measureTimeMillis
 
-fun runPar(): Float {
+fun runPar(sideLength: Int): Float {
     var res: Long = 0
-    val graph = CubicGraph(500)
+    val graph = CubicGraph(sideLength)
     repeat(5) {
+        val distances: IntArray
         val timeCubic = measureTimeMillis {
-            bfsParallel(graph)
+            distances = bfsParallel(graph)
         }
+        validateCubicDistances(distances, sideLength)
         res += timeCubic
         println("Parallel run [${it + 1}/5] -> $timeCubic ms.")
     }
@@ -14,18 +16,29 @@ fun runPar(): Float {
     return res.toFloat()
 }
 
-fun runSeq(): Float {
+fun runSeq(sideLength: Int): Float {
     var res: Long = 0
-    val graph = CubicGraph(500)
+    val graph = CubicGraph(sideLength)
     repeat(5) {
+        val distances: IntArray
         val timeCubic = measureTimeMillis {
-            bfsSequential(graph)
+            distances = bfsSequential(graph)
         }
+        validateCubicDistances(distances, sideLength)
         res += timeCubic
         println("Sequential run [${it + 1}/5] -> $timeCubic ms.")
     }
 
     return res.toFloat()
+}
+
+fun validateCubicDistances(distances: IntArray, sideLength: Int) {
+    for (i in distances.indices) {
+        val x = i / (sideLength * sideLength)
+        val y = (i % (sideLength * sideLength)) / sideLength
+        val z = i % sideLength
+        assert(distances[i] == (x + y + z))
+    }
 }
 
 fun main() {
@@ -41,6 +54,6 @@ fun main() {
             )
         )
     */
-
-    println("Score: ${(1 / runPar()) * runSeq()}")
+    val sideLength = 500
+    println("Score: ${(1 / runPar(sideLength)) * runSeq(sideLength)}")
 }
